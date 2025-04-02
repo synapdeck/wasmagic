@@ -5,7 +5,7 @@ ts_files := $(wildcard src/*.ts src/test/integration/*.ts types/*.ts)
 fmt_files := $(shell echo examples/{worker/*.{mjs,md},stream-detection/*.{js,md}} .github/workflows/*.yml *.js{,on} *.md src/*.js)
 num_processors := $(shell nproc || printf "1")
 
-export EMCC_CFLAGS = -msimd128 -O2
+export EMCC_CFLAGS = -msimd128 -O2 -sSINGLE_FILE=1
 
 test: dist/index.js dist/test/integration/foobar_magic dist/test/integration/png_magic dist/test/integration/jpeg_magic
 	TZ='UTC' npm run test
