@@ -15,6 +15,7 @@
   "license": "BSD-2-Clause",
   "main": "dist/index.js",
   "scripts": {
+    "build": "make package",
     "test": "jest"
   },
   "author": "Colin Kennedy <moshen.colin@gmail.com>",

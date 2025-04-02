@@ -1,11 +1,12 @@
 .PHONY = test package clean clean-dist clean-vendor-file clean-submodules docker-builder-build docker-builder-run fmt update-dependencies
 SHELL := bash
 
+ROOT_DIR:=$(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 ts_files := $(wildcard src/*.ts src/test/integration/*.ts types/*.ts)
 fmt_files := $(shell echo examples/{worker/*.{mjs,md},stream-detection/*.{js,md}} .github/workflows/*.yml *.js{,on} *.md src/*.js)
 num_processors := $(shell nproc || printf "1")
 
-export EMCC_CFLAGS = -msimd128 -O2 -sSINGLE_FILE=1
+export EMCC_CFLAGS = -msimd128 -O2 -sSINGLE_FILE=1 --cache=$(ROOT_DIR)/cache
 
 test: dist/index.js dist/test/integration/foobar_magic dist/test/integration/png_magic dist/test/integration/jpeg_magic
 	TZ='UTC' npm run test
@@ -53,6 +54,7 @@ vendor/file/COPYING:
 dist/magic.mgc: vendor/file/COPYING
 	make clean-vendor-file \
 	&& cd vendor/file \
+	&& libtoolize \
 	&& autoreconf -f -i \
 	&& ./configure --disable-silent-rules \
 	&& make -j${num_processors} \
@@ -61,6 +63,7 @@ dist/magic.mgc: vendor/file/COPYING
 dist/libmagic.so: vendor/file/COPYING
 	make clean-vendor-file \
 	&& cd vendor/file \
+	&& libtoolize \
 	&& autoreconf -f -i \
 	&& emconfigure ./configure --disable-silent-rules \
 	&& cd src/ \
