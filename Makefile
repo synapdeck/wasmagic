@@ -21,7 +21,7 @@ dist/test/integration/foobar_magic dist/test/integration/png_magic dist/test/int
 package: dist/index.js dist/libmagic.LICENSE
 
 dist/index.js: $(ts_files) dist/libmagic-wrapper.js dist/LibmagicModule.d.ts dist/StdioOverrideFunction.d.ts
-	node ./node_modules/.bin/tsc -d
+	tsc -d
 
 dist/libmagic-wrapper.js: src/libmagic-wrapper.c dist/magic.mgc dist/libmagic.so dist/libmagic-wrapper.d.ts
 	emcc -s MODULARIZE -s WASM=1 \
@@ -97,16 +97,16 @@ docker-builder-run: docker-builder-build
 		/bin/bash -c "cd /app && make dist/libmagic-wrapper.js"
 
 fmt: $(ts_files) $(fmt_files)
-	./node_modules/.bin/biome format --write $(ts_files) $(fmt_files)
+	biome format --write $(ts_files) $(fmt_files)
 
 fmt-check: $(ts_files) $(fmt_files)
-	./node_modules/.bin/biome format $(ts_files) $(fmt_files)
+	biome format $(ts_files) $(fmt_files)
 
 lint: $(ts_files) $(fmt_files)
-	./node_modules/.bin/biome lint --write $(ts_files) $(fmt_files)
+	biome lint --write $(ts_files) $(fmt_files)
 
 lint-check: $(ts_files) $(fmt_files)
-	./node_modules/.bin/biome lint $(ts_files) $(fmt_files)
+	biome lint $(ts_files) $(fmt_files)
 
 update-dependencies:
 	directories=("." "examples/worker" "examples/stream-detection"); \
