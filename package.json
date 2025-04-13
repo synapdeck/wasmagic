@@ -14,6 +14,14 @@
   ],
   "license": "BSD-2-Clause",
   "main": "dist/index.js",
+  "module": "dist/esm/index.js",
+  "exports": {
+    ".": {
+      "import": "./dist/esm/index.js",
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
   "scripts": {
     "build": "make package",
     "test": "jest"

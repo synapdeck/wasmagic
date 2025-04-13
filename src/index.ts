@@ -1,4 +1,4 @@
-import libmagicFactory from "./libmagic-wrapper";
+import libmagicFactory from "./libmagic-wrapper.js";
 import type LibmagicModule from "./LibmagicModule";
 import type StdioOverrideFunction from "./StdioOverrideFunction";
 export { default as StdioOverrideFunction } from "./StdioOverrideFunction";

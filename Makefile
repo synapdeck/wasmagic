@@ -18,10 +18,17 @@ dist/test/integration/foobar_magic dist/test/integration/png_magic dist/test/int
 	mkdir -p dist/test/integration \
 	&& cp src/test/integration/*_magic dist/test/integration/
 
-package: dist/index.js dist/libmagic.LICENSE
+package: dist/index.js dist/esm/index.js dist/libmagic.LICENSE
 
 dist/index.js: $(ts_files) dist/libmagic-wrapper.js dist/LibmagicModule.d.ts dist/StdioOverrideFunction.d.ts
 	tsc -d
+
+dist/esm/index.js: $(ts_files) dist/libmagic-wrapper.js dist/LibmagicModule.d.ts dist/StdioOverrideFunction.d.ts
+	tsc -p tsconfig.esm.json -d
+	install -m 644 dist/libmagic-wrapper.js dist/esm/
+	install -m 644 dist/LibmagicModule.d.ts dist/esm/
+	install -m 644 dist/StdioOverrideFunction.d.ts dist/esm/
+	[ -f dist/libmagic-wrapper.wasm ] && install -m 644 dist/libmagic-wrapper.wasm dist/esm/ || true
 
 dist/libmagic-wrapper.js: src/libmagic-wrapper.c dist/magic.mgc dist/libmagic.so dist/libmagic-wrapper.d.ts
 	emcc -s MODULARIZE -s WASM=1 \
